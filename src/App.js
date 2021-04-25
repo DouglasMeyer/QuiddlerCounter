@@ -33,6 +33,13 @@ const cardScores = {
   Z: 14,
 };
 
+const Input = ({ right, className, ...props }) => (
+  <div className={`Input ${className || ""}`}>
+    <input {...props} />
+    <span>{right}</span>
+  </div>
+);
+
 const cardsRegExp = (count) =>
   new RegExp(
     `^ *${new Array(count)
@@ -43,7 +50,7 @@ const cardsRegExp = (count) =>
   );
 
 const CardInput = ({ cardCount, value, onChange }) => {
-  const { points, error } = React.useMemo(() => {
+  const points = React.useMemo(() => {
     const [_, ...cards] =
       cardsRegExp(cardCount).exec((value || "").toUpperCase()) || [];
     const points =
@@ -52,53 +59,26 @@ const CardInput = ({ cardCount, value, onChange }) => {
         : cards
             .map((c) => cardScores[c] || -cardScores[c.slice(1)])
             .reduce((n, c) => n + c, 0);
-    let error = cards.join(" ");
     if (cards.length === 0) {
       const max = (value || "").length;
       const min = Math.ceil(max / 2);
-      error = new Array(max - min + 1)
-        .fill(min)
-        .map((a, i) => a + i)
-        .map((n) => cardsRegExp(n).exec((value || "").toUpperCase()))
-        .find(Boolean);
-      if (error) error = error.slice(1).join(" ");
     }
     // FIXME: this onChange causes warnings
     onChange({ turn: value, score: points });
-    return { points, error };
+    return points;
   }, [value]);
 
   return (
-    <div className="CardInput">
-      <input
-        value={value}
-        onInput={({ target: { value } }) =>
-          onChange({ turn: value, score: points })
-        }
-      />
-      <span>{points}</span>
-      <code>{error}</code>
-    </div>
+    <Input
+      className="CardInput"
+      value={value}
+      onInput={({ target: { value } }) =>
+        onChange({ turn: value, score: points })
+      }
+      right={points}
+    />
   );
 };
-
-// const CardInput = ({ cardCount, value, onChange }) => {
-//   const handleInput = React.useCallback(({ target: { value } }) => {
-//     const [_, ...cards] =
-//       cardsRegExp(cardCount).exec(
-//         (value.replace(/\t/g, "") || "").toUpperCase()
-//       ) || [];
-//     console.log({ cards });
-//     const turn = cards.length ? cards.join("\t") : value;
-//     onChange({ turn, score: value.length });
-//   }, []);
-
-//   return (
-//     <div className="CardInput">
-//       <input value={value} onInput={handleInput} />
-//     </div>
-//   );
-// };
 
 const emptyPlayer = () => ({
   name: "",
@@ -135,22 +115,21 @@ const App = () => {
       <div
         className="grid"
         style={{
-          gridTemplateColumns: `1.2em repeat(${players.length}, 14em) auto`,
+          gridTemplateColumns: `auto repeat(${players.length}, minmax(5em, 14em)) auto`,
         }}
       >
         <div />
         {players.map((player, i) => (
-          <div key={i}>
-            <input
-              placeholder="name"
-              value={player.name}
-              onChange={(e) => setPlayerName(i, e)}
-              style={{ textAlign: "center" }}
-            />{" "}
-            {player.scores.reduce((a, b) => a + b, 0)}
-          </div>
+          <Input
+            key={i}
+            placeholder="name"
+            value={player.name}
+            onChange={(e) => setPlayerName(i, e)}
+            style={{ textAlign: "center" }}
+            right={player.scores.reduce((a, b) => a + b, 0)}
+          />
         ))}
-        <div>
+        <div style={{ gridArea: `1 / -2 / -1 / -1`}}>
           <button
             onClick={() =>
               setPlayers((ps) => [...ps, { name: "", turns: [], scores: [] }])
@@ -165,7 +144,7 @@ const App = () => {
           .map((_, x) => x + 3)
           .map((cardCount, i) => (
             <React.Fragment key={i}>
-              <div>{cardCount}</div>
+              <div style={{ gridColumn: 1, alignSelf: 'center' }}>{cardCount}</div>
               {players.map((player, i) => (
                 <div
                   key={i}
@@ -187,7 +166,6 @@ const App = () => {
                   />
                 </div>
               ))}
-              <div />
             </React.Fragment>
           ))}
       </div>

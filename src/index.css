@@ -1,48 +1,62 @@
 html,
-body,
-#root {
+body {
   height: 100%;
 }
 body {
   font-family: sans-serif;
   background-color: #ddd;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: calc(100vh / 2 - 300px);
 }
 h1 {
   text-align: center;
+  font-family: cursive;
+}
+input {
+  font-size: inherit;
+  border: 0;
+  background-color: transparent;
+}
+input:focus {
+  outline: 0;
 }
 .grid {
   display: grid;
   grid-template-rows: auto repeat(8, 1fr);
   place-content: center;
-}
-.grid > * {
-  padding: 3px 5px;
+  gap: 8px;
 }
 .dealer {
   background-color: #ccc;
 }
-.CardInput {
-  display: grid;
-  grid-template:
-    "input points" auto
-    "error error" auto
-    / 12em 1.5em;
+.Input {
+  position: relative;
+  border-radius: 2px;
+}
+.Input:focus-within {
+  box-shadow: inset 0 0 2px rgb(0 0 0 / 30%);
+}
+.Input > input {
+  width: 100%;
+  box-sizing: border-box;
+}
+.Input > span {
+  position: absolute;
+  right: 3px;
+  top: 0;
+  height: 100%;
+  display: flex;
   align-items: center;
-}
-.CardInput > span {
+  pointer-events: none;
   text-align: right;
+  color: #666;
+  font-size: 0.8em;
 }
-input {
-  /* border: 2px solid lightgray; */
-  padding: 2px 5px;
-  font-size: inherit;
-  /* transition: border 0.2s; */
-  background-color: rgba(255 255 255 / 0.2);
-  border: 1px solid #AAA;
-  /* border-bottom: 2px solid #888; */
-  tab-size: 1;
+.CardInput {
+  border: 1px solid rgb(0 0 0 / 0.1);
 }
-input:focus {
-  border-color: #acf;
-  outline: none;
+.CardInput > input {
+  padding: 3px 5px;
 }
