@@ -1,0 +1,48 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  font-family: sans-serif;
+  background-color: #ddd;
+}
+h1 {
+  text-align: center;
+}
+.grid {
+  display: grid;
+  grid-template-rows: auto repeat(8, 1fr);
+  place-content: center;
+}
+.grid > * {
+  padding: 3px 5px;
+}
+.dealer {
+  background-color: #ccc;
+}
+.CardInput {
+  display: grid;
+  grid-template:
+    "input points" auto
+    "error error" auto
+    / 12em 1.5em;
+  align-items: center;
+}
+.CardInput > span {
+  text-align: right;
+}
+input {
+  /* border: 2px solid lightgray; */
+  padding: 2px 5px;
+  font-size: inherit;
+  /* transition: border 0.2s; */
+  background-color: rgba(255 255 255 / 0.2);
+  border: 1px solid #AAA;
+  /* border-bottom: 2px solid #888; */
+  tab-size: 1;
+}
+input:focus {
+  border-color: #acf;
+  outline: none;
+}
