@@ -1,7 +1,3 @@
-html,
-body {
-  height: 100%;
-}
 body {
   font-family: sans-serif;
   background-color: #ddd;
@@ -22,11 +18,22 @@ input {
 input:focus {
   outline: 0;
 }
+button {
+  font-size: inherit;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: transparent;
+  cursor: pointer;
+}
+button:hover {
+  box-shadow: 0 0 2px rgb(0 0 0 / 20%);
+}
 .grid {
   display: grid;
   grid-template-rows: auto repeat(8, 1fr);
   place-content: center;
   gap: 8px;
+  padding: 0 4px;
 }
 .dealer {
   background-color: #ccc;
@@ -40,6 +47,7 @@ input:focus {
 }
 .Input > input {
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
 }
 .Input > span {
@@ -59,4 +67,47 @@ input:focus {
 }
 .CardInput > input {
   padding: 3px 5px;
+}
+.dropdown {
+  position: relative;
+}
+.dropdown > button {
+  padding: 0px 3px;
+}
+.dropdown > .options {
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  border-radius: 3px;
+}
+.dropdown:focus-within > .options {
+  pointer-events: initial;
+  opacity: 1;
+}
+.options {
+  position: absolute;
+  top: calc(100% + 1ex);
+  left: calc(50% - 2ex);
+  display: flex;
+  flex-direction: column;
+  background-color: #eee;
+  gap: 10px;
+  padding: 10px;
+}
+.options::before {
+  display: inline-block;
+  content: "";
+  position: absolute;
+  top: -2ex;
+  left: 1ex;
+  border-width: 1ex;
+  border-style: solid;
+  border-color: transparent transparent #eee;
+}
+.options > button {
+  border-radius: 0;
+  border-width: 0 0 1px;
+  padding: 0 1em;
 }

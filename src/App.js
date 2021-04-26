@@ -87,7 +87,7 @@ const emptyPlayer = () => ({
 });
 
 const App = () => {
-  const [players, setPlayers] = React.useState([emptyPlayer()]);
+  const [players, setPlayers] = React.useState([emptyPlayer(), emptyPlayer()]);
   React.useEffect(() => {
     try {
       const item = localStorage.getItem("Quiddler");
@@ -107,7 +107,7 @@ const App = () => {
     },
     [players]
   );
-  const resetPlayers = () => setPlayers([emptyPlayer()]);
+  const resetPlayers = () => setPlayers([emptyPlayer(), emptyPlayer()]);
 
   return (
     <React.Fragment>
@@ -115,10 +115,22 @@ const App = () => {
       <div
         className="grid"
         style={{
-          gridTemplateColumns: `auto repeat(${players.length}, minmax(5em, 14em)) auto`,
+          gridTemplateColumns: `auto repeat(${players.length}, minmax(5em, 14em))`,
         }}
       >
-        <div />
+        <div className="dropdown">
+          <button>⋯</button>
+          <div className="options">
+            <button
+              onClick={() =>
+                setPlayers((ps) => [...ps, { name: "", turns: [], scores: [] }])
+              }
+            >
+              +&nbsp;player
+            </button>
+            <button onClick={resetPlayers}>reset</button>
+          </div>
+        </div>
         {players.map((player, i) => (
           <Input
             key={i}
@@ -129,22 +141,12 @@ const App = () => {
             right={player.scores.reduce((a, b) => a + b, 0)}
           />
         ))}
-        <div style={{ gridArea: `1 / -2 / -1 / -1`}}>
-          <button
-            onClick={() =>
-              setPlayers((ps) => [...ps, { name: "", turns: [], scores: [] }])
-            }
-          >
-            + player
-          </button>
-          <button onClick={resetPlayers}>reset</button>
-        </div>
         {new Array(10 - 3 + 1)
           .fill()
           .map((_, x) => x + 3)
           .map((cardCount, i) => (
             <React.Fragment key={i}>
-              <div style={{ gridColumn: 1, alignSelf: 'center' }}>{cardCount}</div>
+              <div style={{ gridColumn: 1, alignSelf: 'center', textAlign: 'center' }}>{cardCount}</div>
               {players.map((player, i) => (
                 <div
                   key={i}
